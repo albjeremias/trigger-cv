@@ -26,10 +26,10 @@ function waitForOpencv(callbackFn, waitTimeMs = 30000, stepTimeMs = 100) {
   onmessage = function (e) {
     switch (e.data.msg) {
       case 'load': {
+        
         // Import Webassembly script
         self.importScripts('./opencv.js');
-
-
+        
         waitForOpencv(function (success) {
           if (success){
                postMessage({ msg: 'loaded' })
@@ -53,7 +53,7 @@ function waitForOpencv(callbackFn, waitTimeMs = 30000, stepTimeMs = 100) {
       }
       case 'process': {
           let imageData = cv.matFromImageData(e.data.imageData);
-
+          
           try{
             let url = triggerCv.processFrame(imageData);
 

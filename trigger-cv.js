@@ -58,8 +58,13 @@ var triggerCv = {
       // Match descriptors.
       this.objectsToDetect[i].numberOfMatches = 0;
 
+      console.log(this.objectsToDetect);
+      console.log(this.scene);
+
+      console.log('asdasda')
       this.matcher.bf.match(this.objectsToDetect[i].descriptors, this.scene.descriptors, this.matcher.matches, this.scene.mask)
 
+      console.log('asdasda')
       if (this.matcher.matches.size() > 1) {
 
         // Sort them in the order of their distance.
@@ -74,6 +79,7 @@ var triggerCv = {
       this.objectsToDetect[i].numberOfMatches = this.matcher.matches.size();
     }
 
+    console.log(this.objectsToDetect);
     let probableImageIdx = 0;
     for (let i = 1; i < this.objectsToDetect.length; i++) {
       if (this.objectsToDetect[i].numberOfMatches >= this.objectsToDetect[probableImageIdx].numberOfMatches) {
@@ -290,7 +296,7 @@ var triggerCv = {
       numberOfMatches: 0,
       minFeaturesToMatch: minFeatures,
     };
-
+    
     if (canvasName) {
       object.im = cv.imread(canvasName);
     }else {
@@ -310,7 +316,7 @@ var triggerCv = {
     orb.detectAndCompute(object.gray, new cv.Mat(), object.kp, object.descriptors);
 
     let t = new cv.Mat();
-    object.kp.convertTo(t, )
+    // object.kp.convertTo(t, )
     
     object.kp = JSON.parse(JSON.stringify(object.kp));
     object.descriptors = JSON.parse(JSON.stringify(object.descriptors));
