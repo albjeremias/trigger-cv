@@ -8,7 +8,7 @@ const CANVAS_LOADER_ID = "loader";
 const WORKER_URL = "../trigger-cv.worker.js";
 const OPENCV_URL = "../opencv.js";
 const images = [
-    { name: 'image1', url: '/index.htm#found', image: 'images/skull.jpg', minFeatures: 16, data: null },
+    { name: 'image1', url: '/skull', image: 'images/skull.jpg', minFeatures: 16, data: null },
 ];
 
 let videoInput = document.getElementById(CANVAS_INPUT_ID);
@@ -159,7 +159,6 @@ function nextFrame() {
     let imageData;
     canvasProcessContext.drawImage(videoInput, 0, 0, videoInput.videoWidth, videoInput.videoHeight);
     try {
-        console.log('.')
         imageData = canvasProcessContext.getImageData(0, 0, canvasProcess.width, canvasProcess.height);
         
         // let cvImageData = cv.matFromImageData(imageData);
@@ -176,7 +175,6 @@ function nextFrame() {
         console.log('Error processing...', error);
         return;
     }
-    console.log('b')
     // requestAnimationFrame(nextFrame);
 }
 
@@ -188,10 +186,7 @@ function onVideoStarted() {
         
         loadOpenCv(() => {
             triggerCv.loadCvExtension();
-            
-            console.log(videoInput.videoWidth)
             triggerCv.addObjectsToDetect(images, videoInput.videoWidth)
-        
             startAndStop.removeAttribute('disabled');
         });
         
@@ -229,7 +224,7 @@ function loadOpenCv(onloadCallback) {
         }
     });
     script.addEventListener('error', () => {
-        self.printError('Failed to load ' + OPENCV_URL);
+        console.log('Failed to load ' + OPENCV_URL);
     });
     script.src = OPENCV_URL;
     let node = document.getElementsByTagName('script')[0];

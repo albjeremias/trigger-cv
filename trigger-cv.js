@@ -58,13 +58,8 @@ var triggerCv = {
       // Match descriptors.
       this.objectsToDetect[i].numberOfMatches = 0;
 
-      console.log(this.objectsToDetect);
-      console.log(this.scene);
-
-      console.log('asdasda')
       this.matcher.bf.match(this.objectsToDetect[i].descriptors, this.scene.descriptors, this.matcher.matches, this.scene.mask)
 
-      console.log('asdasda')
       if (this.matcher.matches.size() > 1) {
 
         // Sort them in the order of their distance.
@@ -79,7 +74,6 @@ var triggerCv = {
       this.objectsToDetect[i].numberOfMatches = this.matcher.matches.size();
     }
 
-    console.log(this.objectsToDetect);
     let probableImageIdx = 0;
     for (let i = 1; i < this.objectsToDetect.length; i++) {
       if (this.objectsToDetect[i].numberOfMatches >= this.objectsToDetect[probableImageIdx].numberOfMatches) {
@@ -95,17 +89,6 @@ var triggerCv = {
         cv.putText(imResult, debugText, new cv.Point(0, 35), cv.FONT_HERSHEY_SIMPLEX, 1.5, new cv.Scalar(255, 0, 0, 255), 2);
       }
     }
-
-    // uncomment to check the features detect by the webcam for each image!
-    // console.log(JSON.stringify(this.objectsToDetect.map(elemt => {
-    //   let variable;
-    //   variable = {
-    //     name: elemt.name,
-    //     featuresDetected: elemt.numberOfMatches,
-    //     minFeatures: elemt.minFeaturesToMatch,
-    //   };
-    //   return variable;
-    // })));
 
     if (this.objectsToDetect[probableImageIdx].numberOfMatches > this.objectsToDetect[probableImageIdx].minFeaturesToMatch) {
       iRet = probableImageIdx;
@@ -230,7 +213,7 @@ var triggerCv = {
   loadImagesToDetect(imagesToDetect, videoWidth, canvasName) {
     var actions = imagesToDetect.map((imageToDetect, index) => {
       return this.loadImageToCanvas(imageToDetect.image, canvasName).then(() => {
-        return new Promise((resolve, reject) => { // (*) fimdomeio does not understande this code
+        return new Promise((resolve, reject) => { 
           resolve(this.addObjectToDetect(imageToDetect.name, imageToDetect.url, videoWidth, canvasName))
         });
       }); // run the function over all items
@@ -268,7 +251,7 @@ var triggerCv = {
 
     var actions = imagesToDetect.map((imageToDetect, index) => {
       return loadImage(imageToDetect.image).then((imageData) => {
-        return new Promise((resolve, reject) => { // (*) fimdomeio does not understande this code
+        return new Promise((resolve, reject) => { 
           resolve(this.addObjectToDetect(imageToDetect.name, imageToDetect.url, videoWidth, false, imageData))
         });
       }); // run the function over all items
@@ -277,8 +260,7 @@ var triggerCv = {
   },
   addObjectsToDetect(imagesToDetect, videoWidth) {
     var actions = imagesToDetect.map((imageToDetect) => {
-        return new Promise((resolve, reject) => { // (*) fimdomeio does not understande this code
-          // console.log('Adding new detection image: ' + imageToDetect.name + ' will direct to: ' + imageToDetect.url)
+        return new Promise((resolve, reject) => { 
           resolve(this.addObjectToDetect(imageToDetect.name, imageToDetect.url, videoWidth, false, imageToDetect.data, imageToDetect.minFeatures))
         });
       }); // run the function over all items
@@ -314,12 +296,6 @@ var triggerCv = {
 
     cv.cvtColor(object.im, object.gray, cv.COLOR_RGBA2GRAY, 0);
     orb.detectAndCompute(object.gray, new cv.Mat(), object.kp, object.descriptors);
-
-    let t = new cv.Mat();
-    // object.kp.convertTo(t, )
-    
-    object.kp = JSON.parse(JSON.stringify(object.kp));
-    object.descriptors = JSON.parse(JSON.stringify(object.descriptors));
 
     object.gray.delete();
     orb.delete();
